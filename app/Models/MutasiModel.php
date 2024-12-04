@@ -54,7 +54,7 @@ class MutasiModel extends Model
 
     public function getMutasi($rekening_id){
         return $this->db->table('mutasi')
-        // ->select()
+        ->select('mutasi.*, transaksi.*, transaksi.jenis_transaksi AS jenis, mutasi.jenis_transaksi AS jenis_mutasi')
         ->join('transaksi', 'transaksi.id = mutasi.transaksi_id')
         ->where('mutasi.rekening_id', $rekening_id)
         ->orderBy('transaksi_id', 'DESC')
@@ -70,5 +70,24 @@ class MutasiModel extends Model
         ->get()
         ->getRow();
     }
+
+        // Get saldo before the payment
+        public function getSaldoSebelum($rekeningId)
+        {
+            // Fetch the last mutation record for the given rekening_id
+            $mutasi = $this->where('rekening_id', $rekeningId)
+                           ->orderBy('id', 'DESC')
+                           ->first();
+            
+            return $mutasi ? $mutasi->saldo_setelah : 0;
+        }
+    
+        // Get saldo after the payment
+        public function getSaldoSetelah($rekeningId, $nominal)
+        {
+            // Get saldo before, then subtract the nominal from it
+            $saldoSebelum = $this->getSaldoSebelum($rekeningId);
+            return $saldoSebelum - $nominal;
+        }
     
 }

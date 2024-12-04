@@ -30,7 +30,7 @@
                     <td><?= $key + 1 ?></td>
                     <td><?= esc($value->tanggal_mutasi) ?></td>
                     <td><?= esc($value->deskripsi) ?></td>
-                    <td><?= esc($value->jenis_transaksi) ?></td>
+                    <td><?= esc($value->jenis_mutasi) ?></td>
                     <td><?= esc($value->nominal) ?></td>
                     <td><?= esc(($value->jenis_transaksi)== 'Kredit' ? $value->saldo_setelah : $value->saldo_setelah) ?>
                     </td>

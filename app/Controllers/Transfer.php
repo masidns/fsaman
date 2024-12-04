@@ -96,9 +96,12 @@ public function prosesTransfer()
 
         // Ambil saldo terakhir pengirim dari mutasi
         $mutasiPengirim = $this->mutasiModel->where('rekening_id', $rekeningPengirimId)
-                                            ->orderBy('tanggal_mutasi', 'DESC')
+                                            ->orderBy('id', 'DESC')
                                             ->first();
         $saldoPengirim = $mutasiPengirim ? $mutasiPengirim->saldo_setelah : 0;  // Jika tidak ada mutasi, saldo 0
+
+        // Log untuk memeriksa saldo pengirim sebelum transfer
+        log_message('info', 'Saldo pengirim sebelum transfer: ' . $saldoPengirim);
 
         // Cek apakah saldo pengirim mencukupi
         if ($saldoPengirim < $nominal) {
@@ -108,9 +111,12 @@ public function prosesTransfer()
 
         // Ambil saldo terakhir penerima dari mutasi
         $mutasiPenerima = $this->mutasiModel->where('rekening_id', $rekeningTujuan->id)
-                                            ->orderBy('tanggal_mutasi', 'DESC')
+                                            ->orderBy('id', 'DESC')
                                             ->first();
         $saldoPenerima = $mutasiPenerima ? $mutasiPenerima->saldo_setelah : 0;  // Jika tidak ada mutasi, saldo 0
+
+        // Log untuk memeriksa saldo penerima sebelum transfer
+        log_message('info', 'Saldo penerima sebelum transfer: ' . $saldoPenerima);
 
         // Mulai transaksi database
         $db = \Config\Database::connect();
@@ -129,15 +135,13 @@ public function prosesTransfer()
         
         // Simpan transaksi
         $this->transaksi->save($transaksiData);
-        // dd($this->transaksi->save($transaksiData));
+        
         // Ambil Insert ID transaksi yang baru saja disimpan
         $transaksiId = $this->transaksi->insertID();
-        
-        // Tampilkan ID transaksi
-        // dd($transaksiId);
-        
+
         // Update saldo pengirim
         $newSaldoPengirim = $saldoPengirim - $nominal;
+        log_message('info', 'Saldo pengirim setelah transfer: ' . $newSaldoPengirim);  // Periksa saldo pengirim setelah transaksi
         $this->mutasiModel->save([
             'rekening_id' => $rekeningPengirim->id,
             'transaksi_id' => $transaksiId, // Menghubungkan mutasi dengan transaksi
@@ -150,6 +154,7 @@ public function prosesTransfer()
 
         // Update saldo penerima
         $newSaldoPenerima = $saldoPenerima + $nominal;
+        log_message('info', 'Saldo penerima setelah transfer: ' . $newSaldoPenerima);  // Periksa saldo penerima setelah transaksi
         $this->mutasiModel->save([
             'rekening_id' => $rekeningTujuan->id,
             'transaksi_id' => $transaksiId, // Menghubungkan mutasi dengan transaksi
@@ -173,8 +178,11 @@ public function prosesTransfer()
         }
     } catch (\Exception $e) {
         log_message('error', 'Terjadi error saat proses transfer: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses transfer.');
+        return redirect()->to('/transfer')->with('error', 'Terjadi kesalahan saat memproses transfer.');
     }
 }
+
+
+
 
 }

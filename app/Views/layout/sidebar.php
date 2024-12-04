@@ -57,6 +57,18 @@
                         <span>Pengguna</span>
                     </a>
                 </li>
+                <li class="sidebar-item  ">
+                    <a href="/jenis" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Jenis</span>
+                    </a>
+                </li>
+                <li class="sidebar-item  ">
+                    <a href="/tagihan" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Tagihan</span>
+                    </a>
+                </li>
 
                 <?php elseif (session()->get('user')['role'] == 'pengguna'): ?>
 
@@ -72,7 +84,12 @@
                         <span>Mutasi</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item  ">
+                    <a href="/pembayaran" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Pembayaran</span>
+                    </a>
+                </li>
                 <?php endif ?>
             </ul>
         </div>

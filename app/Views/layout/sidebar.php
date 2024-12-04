@@ -44,14 +44,36 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item  ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="/Home" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
+                        <span>Home</span>
                     </a>
+                </li>
+                <?php if(session()->get('user')['role'] == 'admin'): ?>
 
-
+                <li class="sidebar-item  ">
+                    <a href="/pengguna" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Pengguna</span>
+                    </a>
                 </li>
 
+                <?php elseif (session()->get('user')['role'] == 'pengguna'): ?>
+
+                <li class="sidebar-item  ">
+                    <a href="/transfer" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Transfer</span>
+                    </a>
+                </li>
+                <li class="sidebar-item  ">
+                    <a href="/mutasi" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Mutasi</span>
+                    </a>
+                </li>
+
+                <?php endif ?>
             </ul>
         </div>
     </div>

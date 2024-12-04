@@ -19,6 +19,7 @@ class TransasksiModel extends Model
         'status',
         'pengguna_id',
         'rekening_id',
+        'deskripsi',
     ];
 
     protected bool $allowEmptyInserts = false;

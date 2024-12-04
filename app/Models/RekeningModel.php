@@ -48,4 +48,30 @@ class RekeningModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getRekeningWithOwner($nomorRekening)
+    {
+        return $this->select('rekening.*, pengguna.nama AS nama_pemilik')
+                    ->join('pengguna', 'pengguna.id = rekening.pengguna_id', 'left')
+                    ->where('rekening.nomor_rekening', $nomorRekening)
+                    ->get()
+                    ->getRowObject(); // Mengembalikan satu baris sebagai objek
+    }
+
+    public function findObject($id)
+{
+    return $this->where('id', $id)->get()->getRowObject();
+}
+
+public function getRekeningByNomor($nomorRekening)
+{
+    return $this->select('rekening.*, pengguna.nama AS nama_pemilik')
+                ->join('pengguna', 'pengguna.id = rekening.pengguna_id', 'left')
+                ->where('rekening.nomor_rekening', $nomorRekening)
+                ->get()
+                ->getRowObject();  // Mengembalikan objek
+}
+
+
+
 }

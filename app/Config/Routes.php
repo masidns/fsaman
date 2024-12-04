@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Auth::index');
 $routes->post('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
+$routes->get('/Home', 'Home::Home');
 
 
 // $routes->group('pengguna',['filter' => 'auth:admin'], static function($routes){
@@ -35,3 +36,17 @@ $routes->group('transaksi', ['filter' => 'auth:admin'], static function ($routes
     $routes->get('tambah', 'Transaksi::tambah'); // Form tambah transaksi
     $routes->post('save', 'Transaksi::save'); // Simpan transaksi
 });
+
+$routes->group('transfer', ['filter' => 'auth:pengguna'], function ($routes) {
+    $routes->get('', 'Transfer::index'); // Halaman form input rekening
+    $routes->post('cekRekening', 'Transfer::cekRekening'); // Proses validasi nomor rekening
+    $routes->post('prosesTransfer', 'Transfer::prosesTransfer'); // Proses transfer
+});
+
+$routes->group('mutasi', ['filter' => 'auth:pengguna'], function ($routes) {
+    $routes->get('', 'mutasi::index'); // Halaman form input rekening
+    $routes->post('cekRekening', 'mutasi::cekRekening'); // Proses validasi nomor rekening
+    $routes->post('prosesmutasi', 'mutasi::prosesTransfer'); // Proses transfer
+});
+
+

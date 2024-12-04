@@ -51,4 +51,24 @@ class MutasiModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getMutasi($rekening_id){
+        return $this->db->table('mutasi')
+        // ->select()
+        ->join('transaksi', 'transaksi.id = mutasi.transaksi_id')
+        ->where('mutasi.rekening_id', $rekening_id)
+        ->orderBy('transaksi_id', 'DESC')
+        ->get()->getResult();
+    }
+
+    public function getsaldo($rekening_id)
+    {
+    return $this->db->table('mutasi') 
+        ->where('rekening_id', $rekening_id)
+        ->orderBy('transaksi_id', 'DESC')
+        ->limit(1)  // Ambil hanya satu mutasi terbaru
+        ->get()
+        ->getRow();
+    }
+    
 }

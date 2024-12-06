@@ -106,7 +106,7 @@ public function prosesTransfer()
         // Cek apakah saldo pengirim mencukupi
         if ($saldoPengirim < $nominal) {
             log_message('error', 'Saldo pengirim tidak mencukupi: ' . $saldoPengirim);
-            return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk melakukan transfer.');
+            return redirect()->to('/transfer')->with('error', 'Saldo tidak mencukupi untuk melakukan transfer.');
         }
 
         // Ambil saldo terakhir penerima dari mutasi
